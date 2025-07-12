@@ -22,9 +22,9 @@ npm install libsvm-js
 ## Load
 The main entry point loads the WebAssembly build and is asynchronous.
 ```js
-require('libsvm-js').then(SVM => {
-    const svm = new SVM(); // ...
-});
+import {loadSVM} from 'libsvm-js';
+const SVM = await loadSVM();
+const svm = new SVM();
 ```
 
 ## Load in a web browser
@@ -33,10 +33,10 @@ The npm package contains a bundle for the browser that works with AMD and browse
 ## Basic usage
 This example illustrates how to use the library to train and use an SVM classifier.
 ```js
+import {loadSVM} from 'libsvm-js';
 
 async function xor() {
-    const SVM = await
-    require('libsvm-js');
+    const SVM = await loadSVM();
     const svm = new SVM({
         kernel: SVM.KERNEL_TYPES.RBF, // The type of kernel I want to use
         type: SVM.SVM_TYPES.C_SVC,    // The type of SVM I want to run

@@ -34,8 +34,7 @@ export default class Benchmarks extends Component {
 
   render() {
     const { wasmTime } = this.state;
-    const disabled = asmTime === 'running' || wasmTime === 'running';
-    let AsmRender = getResultComponent(asmTime);
+    const disabled = wasmTime === 'running';
     let WasmRender = getResultComponent(wasmTime);
 
     const Description = this.props.description || (() => null);
@@ -74,7 +73,7 @@ function getResultComponent(time) {
 function MySpinner() {
   return (
     <div style={{ display: 'inline-block', height: 24, width: 24 }}>
-      <div style={{ width: 24, height: 24 }}>L</div>
+      <div style={{ width: 24, height: 24 }}>...</div>
     </div>
   );
 }

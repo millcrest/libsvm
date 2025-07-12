@@ -1,14 +1,14 @@
-'use strict';
+import Kernel from 'ml-kernel';
+import range from 'lodash.range';
+import data from 'ml-dataset-iris';
+import { loadSVM } from '../wasm.js';
 
-const Kernel = require('ml-kernel');
-const range = require('lodash.range');
+const SVM = await loadSVM();
 
 const gamma = 0.2;
 const cost = 1;
 
 async function exec(precomputed) {
-  const SVM = await require('../wasm');
-  const data = require('ml-dataset-iris');
   var trainData;
 
   const features = data.getNumbers();
@@ -39,6 +39,4 @@ async function exec(precomputed) {
   console.log(JSON.stringify(pred, null, 2));
 }
 
-exec(true).then(() => {
-  return exec(false);
-});
+await exec(true);

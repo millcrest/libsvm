@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import 'jquery';
 import 'tether';
 import 'bootstrap';
+import { loadSVM } from '../wasm.js';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,8 +12,7 @@ import store from './store';
 import './style.css';
 
 const App = React.lazy(async () => {
-  await import('../dist/browser/wasm/libsvm');
-  const SVM = await libsvm;
+  const SVM = await loadSVM();
   window.SVM = SVM;
   return import('./containers/App');
 });

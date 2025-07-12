@@ -1,8 +1,7 @@
-'use strict';
+import load from './src/loadSVM.js';
+import libsvm from './out/wasm/libsvm.js';
 
-const loadSVM = require('./src/loadSVM');
-const libsvm = require('./out/wasm/libsvm');
-
-module.exports = libsvm.then((wrapper) => {
-  return wrapper.load().then(() => loadSVM(wrapper));
-});
+export async function loadSVM() {
+  const module = await libsvm();
+  return load(module);
+}

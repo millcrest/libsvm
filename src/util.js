@@ -14,44 +14,42 @@ const mapOptionToCommand = {
   tolerance: 'e',
   shrinking: 'h',
   probabilityEstimates: 'b',
-  weight: 'w'
+  weight: 'w',
 };
 
-module.exports = {
-  getCommand: function getCommand(options) {
-    var str = '';
-    var keys = Object.keys(options);
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      if (options[key] == null) continue;
-      if (mapOptionToCommand[key] == null) throw new Error('Bad option');
-      if (str) str += ' ';
-      switch (key) {
-        case 'probabilityEstimates':
-        case 'shrinking':
-          str += `-${mapOptionToCommand[key]} ${options[key] ? 1 : 0}`;
-          break;
-        case 'quiet': {
-          if (options[key]) {
-            str += `-${mapOptionToCommand[key]} 1`;
-          }
-          break;
+export function getCommand(options) {
+  var str = '';
+  var keys = Object.keys(options);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    if (options[key] == null) continue;
+    if (mapOptionToCommand[key] == null) throw new Error('Bad option');
+    if (str) str += ' ';
+    switch (key) {
+      case 'probabilityEstimates':
+      case 'shrinking':
+        str += `-${mapOptionToCommand[key]} ${options[key] ? 1 : 0}`;
+        break;
+      case 'quiet': {
+        if (options[key]) {
+          str += `-${mapOptionToCommand[key]} 1`;
         }
-        case 'weight': {
-          const weightKeys = Object.keys(options.weight);
-          for (let j = 0; j < weightKeys.length; j++) {
-            if (j !== 0) str += ' ';
-            str += `-w${weightKeys[j]} ${options.weight[weightKeys[j]]}`;
-          }
-          break;
+        break;
+      }
+      case 'weight': {
+        const weightKeys = Object.keys(options.weight);
+        for (let j = 0; j < weightKeys.length; j++) {
+          if (j !== 0) str += ' ';
+          str += `-w${weightKeys[j]} ${options.weight[weightKeys[j]]}`;
         }
-        default: {
-          str += `-${mapOptionToCommand[key]} ${options[key]}`;
-          break;
-        }
+        break;
+      }
+      default: {
+        str += `-${mapOptionToCommand[key]} ${options[key]}`;
+        break;
       }
     }
-
-    return str;
   }
-};
+
+  return str;
+}

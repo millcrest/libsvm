@@ -1,8 +1,6 @@
-'use strict';
+import { getCommand } from './util.js';
 
-module.exports = function (libsvm) {
-  const util = require('./util');
-
+export default function loadSVM(libsvm) {
   /* eslint-disable camelcase */
   const predict_one = libsvm.cwrap('libsvm_predict_one', 'number', [
     'number',
@@ -159,7 +157,7 @@ module.exports = function (libsvm) {
       Object.assign(options, this.options, {
         gamma: this.options.gamma ? this.options.gamma : 1 / samples[0].length,
       });
-      return util.getCommand(options);
+      return getCommand(options);
     }
 
     /**
@@ -380,4 +378,4 @@ module.exports = function (libsvm) {
   }
 
   return SVM;
-};
+}

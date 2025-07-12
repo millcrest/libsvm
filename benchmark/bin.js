@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-'use strict';
 
-const Table = require('cli-table');
-const spawn = require('child_process').spawn;
+import Table from 'cli-table';
+import { spawn } from 'node:child_process';
+import { loadSVM } from '../wasm.js';
+
 const argv = process.argv.slice(2);
 let benchmarks = argv[0];
 let modes = argv[1];
@@ -56,11 +57,11 @@ async function exec() {
 async function run(mode, time, benchmark) {
   let count = 0;
   console.log(mode, benchmark);
-  const runBenchmark = require(`./${benchmark}-benchmark`);
+  const runBenchmark = (await import(`./${benchmark}-benchmark.js`)).default;
   let SVM;
   if (mode === 'wasm') {
     try {
-      SVM = await require('../wasm');
+      SVM = await loadSVM();
     } catch (e) {
       console.log(e.message);
       return 'error';
@@ -69,12 +70,14 @@ async function run(mode, time, benchmark) {
     let str = '';
     const prom = new Promise((resolve, reject) => {
       const [dir, exec] = benchmark.split('/');
-      const cmd = `${__dirname}/${dir}/bin/${exec}`;
+      const cmd = `${import.meta.dirname}/${dir}/bin/${exec}`;
       const args = [];
       if (benchmark === 'iris/precomputed-cv') {
-        args.push(`${__dirname}/${dir}/data-kernel-rbf-gamma-2e-1.txt`);
+        args.push(
+          `${import.meta.dirname}/${dir}/data-kernel-rbf-gamma-2e-1.txt`,
+        );
       } else {
-        args.push(`${__dirname}/${dir}/data.txt`);
+        args.push(`${import.meta.dirname}/${dir}/data.txt`);
       }
       args.push(time);
       console.log(cmd);
