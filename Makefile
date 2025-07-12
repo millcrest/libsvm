@@ -11,7 +11,7 @@ svm.o: libsvm/svm.cpp libsvm/svm.h
 	$(CXX) $(CFLAGS) -c libsvm/svm.cpp -o svm.o
 
 wasm: js-interfaces.c svm.o libsvm/svm.h
-	mkdir -p $(BUILD_DIR)/wasm; $(CC) $(CFLAGS) js-interfaces.c svm.o -o $(BUILD_DIR)/wasm/libsvm.js -s DISABLE_EXCEPTION_CATCHING=0 -s NODEJS_CATCH_EXIT=0 -s "EXPORT_NAME=\"SVM\"" -s MODULARIZE=1 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORTED_FUNCTIONS)  -s EXPORTED_RUNTIME_METHODS='["cwrap", "HEAPF64", 'HEAP32']'
+	mkdir -p $(BUILD_DIR)/wasm; $(CC) $(CFLAGS) js-interfaces.c svm.o -o $(BUILD_DIR)/wasm/libsvm.js -s DISABLE_EXCEPTION_CATCHING=0 -s NODEJS_CATCH_EXIT=0 -s "EXPORT_NAME=\"SVM\"" -s MODULARIZE=1 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORTED_FUNCTIONS)  -s EXPORTED_RUNTIME_METHODS='["cwrap", "HEAPF64", 'HEAP32', 'UTF8ToString']'
 
 clean:
 	rm -f *~ js-interfaces.o ./svm.o

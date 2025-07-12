@@ -23,8 +23,12 @@ export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
       for (let param of parameters) {
         realConfig[param.name] = param.normalize(config[param.name]);
       }
+      console.log('create svm instance');
       const svm = new SVM({ ...realConfig, quiet: true });
+      console.log('train');
       svm.train(SVCPoints.points, SVCPoints.labels);
+
+      console.log('get indices');
       SVs = svm.getSVIndices();
 
       for (let i = 0; i < canvasSize; i++) {

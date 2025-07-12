@@ -301,7 +301,7 @@ module.exports = function (libsvm) {
       if (!this.model)
         throw new Error('Cannot serialize model. No model was trained');
       const result = serialize_model(this.model);
-      const str = libsvm.Pointer_stringify(result);
+      const str = libsvm.UTF8ToString(result);
       libsvm._free(result);
       return str;
     }
