@@ -3,9 +3,9 @@ import { throttle } from 'lodash-es';
 import { connect } from 'react-redux';
 import {
   Route,
+  Routes,
   HashRouter as Router,
-  Redirect,
-  Switch,
+  Navigate,
 } from 'react-router-dom';
 
 import { updateStyleBreakpoint } from '../actions/index';
@@ -34,14 +34,14 @@ class App extends Component {
     return (
       <Router>
         <div className="container">
-          <Navigation />
-          <Switch>
-            <Redirect exact from="/" to="/SVC" />
-            <Route exact path="/SVC" component={SVC} />
-            <Route exact path="/SVR" component={SVR} />
-            <Route exact path="/SVC/OneClass" component={OneClassSVC} />
-            <Route exact path="/benchmarks" component={Benchmarks} />
-          </Switch>
+          <Navigation replace to="/SVC" />
+          <Routes>
+            <Route exact path="/" element={<Navigate to="/SVC" />} />
+            <Route exact path="/SVC" element={<SVC />} />
+            <Route exact path="/SVR" element={<SVR />} />
+            <Route exact path="/SVC/OneClass" element={<OneClassSVC />} />
+            <Route exact path="/benchmarks" element={<Benchmarks />} />
+          </Routes>
         </div>
       </Router>
     );
