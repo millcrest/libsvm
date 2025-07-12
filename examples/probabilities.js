@@ -3,12 +3,11 @@
 const Kernel = require('ml-kernel');
 const range = require('lodash.range');
 
-const SVM = require('../wasm');
-
 const gamma = 0.2;
 const cost = 1;
 
-function exec(SVM, precomputed) {
+async function exec(precomputed) {
+  const SVM = await require('../wasm');
   const data = require('ml-dataset-iris');
   var trainData;
 
@@ -40,4 +39,6 @@ function exec(SVM, precomputed) {
   console.log(JSON.stringify(pred, null, 2));
 }
 
-exec(SVM, true);
+exec(true).then(() => {
+  return exec(false);
+});
