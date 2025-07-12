@@ -14,7 +14,7 @@
   "scripts": {
     "benchmark": "npm run build-benchmark && node benchmark/bin",
     "build": "run-s build-emscripten-wasm build-emscripten-clean",
-    "build-benchmark": "(cd benchmark/iris; make)",
+    "build-benchmark": "(cd benchmark/iris; make clean && make)",
     "build-emscripten-clean": "make clean && rm -rf out/emscripten/",
     "build-emscripten-wasm": "rm -rf out/wasm && mkdir -p out/wasm && make wasm",
     "webpack-build": "rm -rf dist/browser && mkdir -p dist/browser/wasm &&  webpack --mode production --config webpack/webpack.wasm.js &&  cp out/wasm/libsvm.wasm dist/browser/wasm/",
