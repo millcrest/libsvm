@@ -1,6 +1,6 @@
 node_modules
 dist
-out
+build
 demo-dist
 benchmark/**/bin
 svm.o
