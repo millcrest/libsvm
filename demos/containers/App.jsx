@@ -7,13 +7,6 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faUndo,
-  faRedo,
-  faQuestion,
-  faBroom,
-} from '@fortawesome/free-solid-svg-icons';
 
 import { updateStyleBreakpoint } from '../actions/index';
 import SVC from '../components/SVC';
@@ -22,8 +15,6 @@ import OneClassSVC from '../components/OneClassSVC';
 import Navigation from '../components/Navigation';
 
 import Benchmarks from './Benchmarks';
-
-library.add(faUndo, faRedo, faQuestion, faBroom);
 
 class App extends Component {
   componentWillMount() {

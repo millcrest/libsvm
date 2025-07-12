@@ -1,5 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaUndo, FaRedo, FaBroom, FaQuestion } from 'react-icons/fa';
 
 export default function ControlBar(props) {
   return (
@@ -15,7 +15,7 @@ export default function ControlBar(props) {
         onClick={props.undo}
         disabled={!props.canUndo}
       >
-        <FontAwesomeIcon icon="undo" />
+        <FaUndo />
       </button>
       <button
         name="redo"
@@ -24,7 +24,7 @@ export default function ControlBar(props) {
         onClick={props.redo}
         disabled={!props.canRedo}
       >
-        <FontAwesomeIcon icon="redo" />
+        <FaRedo />
       </button>
       <button
         name="clear"
@@ -32,7 +32,7 @@ export default function ControlBar(props) {
         className="btn btn-secondary"
         onClick={props.clear}
       >
-        <FontAwesomeIcon icon="broom" />
+        <FaBroom />
       </button>
       <button
         title={props.helpTitle}
@@ -41,7 +41,7 @@ export default function ControlBar(props) {
         type="button"
         className="btn btn-secondary"
       >
-        <FontAwesomeIcon icon="question" />
+        <FaQuestion />
       </button>
     </div>
   );
