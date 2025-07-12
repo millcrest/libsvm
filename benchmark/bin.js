@@ -108,7 +108,7 @@ async function run(mode, time, benchmark) {
   }
 
   try {
-    count = runBenchmark(SVM, time);
+    count = await runBenchmark(SVM, time);
   } catch (e) {
     console.error('error executing benchmark', e.message);
     return e.message;

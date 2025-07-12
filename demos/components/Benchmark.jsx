@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Worker from '../../benchmark/worker?worker';
+import Worker from '../../benchmark/worker.js?worker';
 
 export default class Benchmarks extends Component {
   constructor(props) {

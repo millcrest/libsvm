@@ -9,7 +9,7 @@ export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
   let SVs = [];
   const line = [];
   if (config) {
-    startTime = Date.now();
+    startTime = performance.now();
     points = SVCPoints.points.map((p, idx) => {
       return {
         label: SVCPoints.labels[idx],
@@ -23,12 +23,9 @@ export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
       for (let param of parameters) {
         realConfig[param.name] = param.normalize(config[param.name]);
       }
-      console.log('create svm instance');
       const svm = new SVM({ ...realConfig, quiet: true });
-      console.log('train');
       svm.train(SVCPoints.points, SVCPoints.labels);
 
-      console.log('get indices');
       SVs = svm.getSVIndices();
 
       for (let i = 0; i < canvasSize; i++) {
@@ -45,7 +42,7 @@ export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
         }
       }
     }
-    endTime = Date.now();
+    endTime = performance.now();
   }
 
   return {
@@ -76,7 +73,7 @@ export function getSVRCanvasData(
     for (let param of getHyperParameters(config.type, config.kernel)) {
       realConfig[param.name] = param.normalize(config[param.name]);
     }
-    startTime = Date.now();
+    startTime = performance.now();
     points = canvasPoints.points.map((p) => {
       return {
         label: 0,
@@ -98,7 +95,7 @@ export function getSVRCanvasData(
     }
   }
 
-  endTime = Date.now();
+  endTime = performance.now();
   return {
     width: canvasSize,
     height: canvasSize,

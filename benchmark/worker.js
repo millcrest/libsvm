@@ -1,4 +1,4 @@
-import gridSearchBenchmark from './iris/grid-search-benchmark.js';
+import gridSearchBenchmark from './iris/grid-search-benchmark';
 import crossValidationBenchmark from './iris/cross-validation-benchmark.js';
 import precomputedBenchmark from './iris/precomputed-cv-benchmark.js';
 import { loadSVM } from '../wasm.js';

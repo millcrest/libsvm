@@ -1,11 +1,11 @@
 import Kernel from 'ml-kernel';
 import range from 'lodash.range';
-import data from 'ml-dataset-iris';
 
 const gamma = 0.2;
 const cost = 1;
 
-export default function exec(SVM, time) {
+export default async function exec(SVM, time) {
+  const data = await import('ml-dataset-iris');
   const MILISECONDS = time * 1000;
 
   const features = data.getNumbers();
@@ -21,8 +21,8 @@ export default function exec(SVM, time) {
     .compute(features)
     .addColumn(0, range(1, labels.length + 1));
 
-  const t1 = Date.now();
-  let t2 = Date.now();
+  const t1 = performance.now();
+  let t2 = performance.now();
   let count = 0;
   while (t2 - t1 < MILISECONDS) {
     const svm = new SVM({
@@ -33,7 +33,7 @@ export default function exec(SVM, time) {
     svm.crossValidation(KData, labels, labels.length);
     svm.free();
     count++;
-    t2 = Date.now();
+    t2 = performance.now();
   }
 
   // console.log('accuracy: ', result.reduce((prev, current, idx) => current === labels[idx] ? prev + 1 : prev, 0)/ labels.length);

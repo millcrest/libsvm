@@ -20,8 +20,8 @@ function exec(time, precomputed) {
   labels = labels.map((l) => c[l]);
 
   let result;
-  const t1 = Date.now();
-  let t2 = Date.now();
+  const t1 = performance.now();
+  let t2 = performance.now();
   let count = 0;
   while (t2 - t1 < MILISECONDS) {
     if (precomputed) {
@@ -42,7 +42,7 @@ function exec(time, precomputed) {
     result = svm.crossValidation(trainData, labels, labels.length);
     svm.free();
     count++;
-    t2 = Date.now();
+    t2 = performance.now();
   }
 
   console.log(

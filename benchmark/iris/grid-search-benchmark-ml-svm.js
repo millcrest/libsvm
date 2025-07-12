@@ -1,8 +1,8 @@
 import SVM from 'ml-svm';
-import data from 'ml-dataset-iris';
 import { gamma, cost } from './util.js';
 
-export default function exec(time) {
+export default async function exec(time) {
+  const data = await import('ml-dataset-iris');
   const MILISECONDS = time * 1000;
 
   const features = data.getNumbers();
@@ -13,8 +13,8 @@ export default function exec(time) {
   classes.forEach((v, idx) => (c[v] = idx));
   labels = labels.map((l) => c[l]);
 
-  const startTime = Date.now();
-  let endTime = Date.now();
+  const startTime = performance.now();
+  let endTime = performance.now();
   let count = 0;
   while (endTime - startTime < MILISECONDS) {
     for (let c of cost) {
@@ -33,7 +33,7 @@ export default function exec(time) {
       }
     }
     count++;
-    endTime = Date.now();
+    endTime = performance.now();
   }
 
   return count;

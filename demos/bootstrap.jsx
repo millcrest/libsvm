@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import 'jquery';
 import 'tether';
@@ -18,16 +18,12 @@ const App = React.lazy(async () => {
 });
 
 const app = document.getElementById('app');
+const root = createRoot(app);
 
-const render = (Component) => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <Suspense fallback={null}>
-        <Component />
-      </Suspense>
-    </Provider>,
-    app,
-  );
-};
-
-render(App);
+root.render(
+  <Provider store={store}>
+    <Suspense fallback={null}>
+      <App />
+    </Suspense>
+  </Provider>,
+);

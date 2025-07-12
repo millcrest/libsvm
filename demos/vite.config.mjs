@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [reactRefresh()],
-  build: {
-    outDir: 'demo-dist',
+  worker: {
+    format: 'es',
   },
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { GoMarkGithub } from 'react-icons/go';
+import { FaGithub } from 'react-icons/fa';
 export default function Navigation() {
   return (
     <nav
@@ -20,7 +20,7 @@ export default function Navigation() {
       </button>
       <div style={{ display: 'flex' }}>
         <a href="https://github.com/mljs/libsvm">
-          <GoMarkGithub
+          <FaGithub
             className="nav-item"
             size={32}
             style={{ marginRight: 15 }}
