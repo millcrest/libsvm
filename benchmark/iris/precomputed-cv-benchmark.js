@@ -17,7 +17,7 @@ export default async function exec(SVM, time) {
 
   // We precompute the gaussian kernel
   const kernel = new Kernel('gaussian', { sigma: 1 / Math.sqrt(gamma) });
-  const KData = kernel
+  const gaussianKernel = kernel
     .compute(features)
     .addColumn(0, range(1, labels.length + 1));
 
@@ -30,7 +30,7 @@ export default async function exec(SVM, time) {
       cost: cost,
       kernel: SVM.KERNEL_TYPES.PRECOMPUTED,
     });
-    svm.crossValidation(KData, labels, labels.length);
+    svm.crossValidation(gaussianKernel.data, labels, labels.length);
     svm.free();
     count++;
     t2 = performance.now();
