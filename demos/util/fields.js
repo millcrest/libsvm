@@ -59,9 +59,10 @@ export const EPSILON = {
 };
 
 export const DEGREE = {
-  HP: 'HP_DEGREE',
+  id: 'HP_DEGREE',
   name: 'degree',
   type: 'number',
+  normalize: toNumber,
   gridSearch: false,
 };
 
@@ -84,6 +85,7 @@ export function getHyperParameters(type, kernel) {
   if (type === SVM.SVM_TYPES.EPSILON_SVR) {
     fields.push(EPSILON);
   }
+  console.log(fields);
   return fields;
 }
 
