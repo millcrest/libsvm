@@ -1,12 +1,11 @@
 import React from 'react';
 
 import { CANVAS_RESOLUTION, CANVAS_SCALE_FACTOR } from '../constants';
+import connectStyle from './connectStyle';
 
-export default function ChooseLabel(props) {
-  const { colors, setActiveLabel, activeLabel } = props;
+function ChooseLabel(props) {
+  const { colors, setActiveLabel, activeLabel, currentBreakpoint } = props;
 
-  // todo: replace with real state
-  const currentBreakpoint = 'md';
   const width =
     CANVAS_RESOLUTION[currentBreakpoint] *
     CANVAS_SCALE_FACTOR[currentBreakpoint];
@@ -34,3 +33,5 @@ export default function ChooseLabel(props) {
     </div>
   );
 }
+
+export default connectStyle(ChooseLabel);

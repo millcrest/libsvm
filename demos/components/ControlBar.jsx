@@ -1,13 +1,24 @@
-import React from 'react';
+import { Popover } from 'bootstrap';
+import React, { useLayoutEffect } from 'react';
 import { FaUndo, FaRedo, FaBroom, FaQuestion } from 'react-icons/fa';
 
 export default function ControlBar(props) {
+  useLayoutEffect(() => {
+    const popoverTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="popover"]',
+    );
+    const popoverList = [...popoverTriggerList].map(
+      (popoverTriggerEl) => new Popover(popoverTriggerEl),
+    );
+
+    return () => {
+      popoverList.forEach((popover) => {
+        popover.dispose();
+      });
+    };
+  }, []);
   return (
-    <div
-      style={props.style}
-      className={`ml-2 btn-group${props.vertical ? ' btn-group-vertical' : ''}`}
-      role="group"
-    >
+    <div style={props.style} className="ml-2 btn-group-vertical" role="group">
       <button
         name="undo"
         type="button"
@@ -35,8 +46,10 @@ export default function ControlBar(props) {
         <FaBroom />
       </button>
       <button
-        title={props.helpTitle}
-        data-content={props.help}
+        data-bs-trigger="focus"
+        data-bs-toggle="popover"
+        data-bs-title={props.helpTitle}
+        data-bs-content={props.help}
         name="explain"
         type="button"
         className="btn btn-secondary"

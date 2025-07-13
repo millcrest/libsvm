@@ -51,7 +51,7 @@ export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
     background,
     points,
     scale: CANVAS_SCALE_FACTOR[currentBreakpoint],
-    info: startTime ? `${endTime - startTime} ms` : '',
+    info: startTime ? `${(endTime - startTime).toFixed(1)} ms` : '',
     SVs,
     line,
   };
@@ -102,7 +102,7 @@ export function getSVRCanvasData(
     background,
     points,
     scale: CANVAS_SCALE_FACTOR[currentBreakpoint],
-    info: startTime ? `${endTime - startTime} ms` : '',
+    info: startTime ? `${(endTime - startTime).toFixed(1)} ms` : '',
     SVs,
     line,
   };

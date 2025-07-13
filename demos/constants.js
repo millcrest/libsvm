@@ -3,7 +3,7 @@ import { getDistinctColors } from './util';
 // Large screens are considered to use more powerful devices
 // So they have a larger resolution (and a smaller scale factor)
 export const CANVAS_RESOLUTION = {
-  xs: 50,
+  xs: 100,
   sm: 100,
   md: 100,
   lg: 200,
@@ -12,7 +12,7 @@ export const CANVAS_RESOLUTION = {
 
 export const CANVAS_SCALE_FACTOR = {
   xs: 4,
-  sm: 3,
+  sm: 4,
   md: 4,
   lg: 2,
   xl: 2,

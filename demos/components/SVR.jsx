@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ControlBar from '../containers/SVRControlBar';
 import SVCConfig from '../containers/SVRConfig';
 import useCanvasPoints from '../hooks/useCanvasPoints';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,6 +9,7 @@ import {
   SVR_LABEL_COLORS,
 } from '../constants';
 import SVRCanvas from '../containers/SVRCanvas';
+import ControlBar from './ControlBar';
 
 export default function SVR() {
   const methods = useForm({
@@ -41,10 +41,9 @@ export default function SVR() {
             actions={actions}
           />
           <ControlBar
-            vertical={true}
             style={{ paddingLeft: 4 }}
             helpTitle="Support vector regression canvas"
-            help="SVM will try to fit each drawn circle with a curve. The drawn circles represent the training set. The line represents the predictions for each possible x (abscissa)."
+            help="SVM will try to fit each drawn circle with a curve. The drawn circles represent the training set. Points with a thick border are support vectors. The line represents the predictions for each possible x (abscissa) value."
             clear={actions.clearPoints}
             undo={actions.undoPoints}
             redo={actions.redoPoints}

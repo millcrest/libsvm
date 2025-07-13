@@ -71,8 +71,8 @@ class Canvas extends Component {
     this.ctx.fillStyle = 'black';
     this.ctx.fillText(
       info,
-      this.convertXCoordinates(0.9),
-      this.convertYCoordinates(0.97),
+      this.props.width * this.props.scale - info.length * 7,
+      this.props.height * this.props.scale - 5,
     );
   }
 
