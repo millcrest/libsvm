@@ -1,140 +1,109 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect';
-import { isEqual } from 'lodash-es';
+import { CANVAS_RESOLUTION, CANVAS_SCALE_FACTOR } from '../constants';
+import { getHyperParameters } from '../util/fields';
 
-import {
-  LABELS_COLORS,
-  ONE_CLASS_LABEL_COLORS,
-  TWO_CLASS_LABEL_COLORS,
-  CANVAS_RESOLUTION,
-  CANVAS_SCALE_FACTOR
-} from '../constants';
+export function getSVCCanvasData(SVCPoints, config, currentBreakpoint = 'md') {
+  let startTime, endTime;
+  const canvasSize = CANVAS_RESOLUTION[currentBreakpoint];
+  let points = [];
+  let background = [];
+  let SVs = [];
+  const line = [];
+  if (config) {
+    startTime = performance.now();
+    points = SVCPoints.points.map((p, idx) => {
+      return {
+        label: SVCPoints.labels[idx],
+        x: p[0] * canvasSize,
+        y: p[1] * canvasSize,
+      };
+    });
+    if (points.length) {
+      const realConfig = Object.assign({}, config);
+      const parameters = getHyperParameters(config.type, config.kernel);
+      for (let param of parameters) {
+        realConfig[param.name] = param.normalize(config[param.name]);
+      }
+      const svm = new SVM({ ...realConfig, quiet: true });
+      svm.train(SVCPoints.points, SVCPoints.labels);
 
-const createSelector = createSelectorCreator(defaultMemoize, (val1, val2) => {
-  return val1 === val2 || isEqual(val1, val2);
-});
+      SVs = svm.getSVIndices();
 
-const getSVCConfig = (state) =>
-  (state.form.SVCConfig ? state.form.SVCConfig.values : undefined);
-const getSVCPoints = (state) => state.SVCPoints.present;
-const getStyle = (state) => state.style;
-const getSVRConfig = (state) =>
-  (state.form.SVRConfig ? state.form.SVRConfig.values : undefined);
-const getSVRPoints = (state) => state.SVRPoints.present;
-
-export const getLabelColors = createSelector([getSVCConfig], (SVCConfig) => {
-  if (SVCConfig && SVCConfig.type === SVM.SVM_TYPES.ONE_CLASS) {
-    return TWO_CLASS_LABEL_COLORS;
-  } else {
-    return LABELS_COLORS;
-  }
-});
-
-export const getLabelChooseColors = createSelector(
-  [getSVCConfig],
-  (SVCConfig) => {
-    if (SVCConfig && SVCConfig.type === SVM.SVM_TYPES.ONE_CLASS) {
-      return ONE_CLASS_LABEL_COLORS;
-    } else {
-      return LABELS_COLORS;
-    }
-  }
-);
-
-export const getSVCData = createSelector(
-  [getSVCConfig, getSVCPoints, getStyle],
-  (SVCConfig, SVCPoints, style) => {
-    let startTime, endTime;
-    const canvasSize = CANVAS_RESOLUTION[style.currentBreakpoint];
-    let points = [];
-    let background = [];
-    let SVs = [];
-    const line = [];
-    if (SVCConfig) {
-      startTime = Date.now();
-      points = SVCPoints.points.map((p, idx) => {
-        return {
-          label: SVCPoints.labels[idx],
-          x: p[0] * canvasSize,
-          y: p[1] * canvasSize
-        };
-      });
-      if (points.length) {
-        const svm = new SVM({ ...SVCConfig, quiet: true });
-        svm.train(SVCPoints.points, SVCPoints.labels);
-        SVs = svm.getSVIndices();
-
-        for (let i = 0; i < canvasSize; i++) {
-          for (let j = 0; j < canvasSize; j++) {
-            let val = svm.predictOne([j / canvasSize, i / canvasSize]);
-            if (SVCConfig.type === SVM.SVM_TYPES.ONE_CLASS) {
-              if (val < 0) {
-                val = 1;
-              } else {
-                val = 0;
-              }
+      for (let i = 0; i < canvasSize; i++) {
+        for (let j = 0; j < canvasSize; j++) {
+          let val = svm.predictOne([j / canvasSize, i / canvasSize]);
+          if (config.type === SVM.SVM_TYPES.ONE_CLASS) {
+            if (val < 0) {
+              val = 1;
+            } else {
+              val = 0;
             }
-            background.push(val);
           }
+          background.push(val);
         }
       }
-      endTime = Date.now();
     }
-
-    return {
-      width: canvasSize,
-      height: canvasSize,
-      background,
-      points,
-      scale: CANVAS_SCALE_FACTOR[style.currentBreakpoint],
-      info: startTime ? `${endTime - startTime} ms` : '',
-      SVs,
-      line
-    };
+    endTime = performance.now();
   }
-);
 
-export const getSVRData = createSelector(
-  [getSVRConfig, getSVRPoints, getStyle],
-  (SVRConfig, SVRPoints, style) => {
-    let startTime, endTime;
-    const canvasSize = CANVAS_RESOLUTION[style.currentBreakpoint];
-    let points = [];
-    let background = [];
-    let line = [];
-    let SVs = [];
-    if (SVRConfig) {
-      startTime = Date.now();
-      points = SVRPoints.points.map((p) => {
-        return {
-          label: 0,
-          x: p[0] * canvasSize,
-          y: p[1] * canvasSize
-        };
-      });
-      if (points.length) {
-        const svm = new SVM({ ...SVRConfig, quiet: true });
-        svm.train(
-          SVRPoints.points.map((p) => [p[0]]),
-          SVRPoints.points.map((p) => p[1])
-        );
-        SVs = svm.getSVIndices();
+  return {
+    width: canvasSize,
+    height: canvasSize,
+    background,
+    points,
+    scale: CANVAS_SCALE_FACTOR[currentBreakpoint],
+    info: startTime ? `${(endTime - startTime).toFixed(1)} ms` : '',
+    SVs,
+    line,
+  };
+}
 
-        line = svm.predict(
-          Array.from({ length: canvasSize }).map((v, i) => [i / canvasSize])
-        );
-      }
+export function getSVRCanvasData(
+  canvasPoints,
+  config,
+  currentBreakpoint = 'md',
+) {
+  let startTime, endTime;
+  const canvasSize = CANVAS_RESOLUTION[currentBreakpoint];
+  let points = [];
+  let background = [];
+  let line = [];
+  let SVs = [];
+  if (config) {
+    const realConfig = Object.assign({}, config);
+    for (let param of getHyperParameters(config.type, config.kernel)) {
+      realConfig[param.name] = param.normalize(config[param.name]);
     }
+    startTime = performance.now();
+    points = canvasPoints.points.map((p) => {
+      return {
+        label: 0,
+        x: p[0] * canvasSize,
+        y: p[1] * canvasSize,
+      };
+    });
+    if (points.length) {
+      const svm = new SVM({ ...realConfig, quiet: true });
+      svm.train(
+        canvasPoints.points.map((p) => [p[0]]),
+        canvasPoints.points.map((p) => p[1]),
+      );
+      SVs = svm.getSVIndices();
 
-    endTime = Date.now();
-    return {
-      width: canvasSize,
-      height: canvasSize,
-      background,
-      points,
-      scale: CANVAS_SCALE_FACTOR[style.currentBreakpoint],
-      info: startTime ? `${endTime - startTime} ms` : '',
-      SVs,
-      line
-    };
+      line = svm.predict(
+        Array.from({ length: canvasSize }).map((v, i) => [i / canvasSize]),
+      );
+    }
   }
-);
+
+  endTime = performance.now();
+  return {
+    width: canvasSize,
+    height: canvasSize,
+    background,
+    points,
+    scale: CANVAS_SCALE_FACTOR[currentBreakpoint],
+    info: startTime ? `${(endTime - startTime).toFixed(1)} ms` : '',
+    SVs,
+    line,
+  };
+}

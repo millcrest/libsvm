@@ -1,13 +1,11 @@
-'use strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
-const fs = require('fs');
-const path = require('path');
-
-const SVM = require('../asm');
-
+import { loadSVM } from '../wasm.js';
+const SVM = await loadSVM();
 let data = fs.readFileSync(
-  path.join(__dirname, './bodyfat_scale.txt'),
-  'utf-8'
+  path.join(import.meta.dirname, './bodyfat_scale.txt'),
+  'utf-8',
 );
 data = data.split('\n').map((line) => line.split(' ').filter((el) => el));
 let labels = data.map((line) => +line.splice(0, 1)[0]);
@@ -18,11 +16,14 @@ const svm = new SVM({
   kernel: SVM.KERNEL_TYPES.RBF,
   epsilon: 0.001,
   quiet: false,
-  probabilityEstimates: true
+  probabilityEstimates: true,
 });
 
 svm.train(features, labels);
 console.log(svm.predictInterval(features, 0.99));
-fs.writeFileSync(path.join(__dirname, 'bodyfat.model'), svm.serializeModel());
+fs.writeFileSync(
+  path.join(import.meta.dirname, 'bodyfat.model'),
+  svm.serializeModel(),
+);
 
 // svm.crossValidation(features, labels);

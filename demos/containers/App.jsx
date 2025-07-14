@@ -1,22 +1,28 @@
 import React, { Component } from 'react';
 import { throttle } from 'lodash-es';
 import { connect } from 'react-redux';
-import { Route, HashRouter as Router, Redirect, Switch } from 'react-router-dom';
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+import {
+  Route,
+  Routes,
+  HashRouter as Router,
+  Navigate,
+} from 'react-router-dom';
 
 import { updateStyleBreakpoint } from '../actions/index';
 import SVC from '../components/SVC';
 import SVR from '../components/SVR';
+import OneClassSVC from '../components/OneClassSVC';
 import Navigation from '../components/Navigation';
 
-
 import Benchmarks from './Benchmarks';
-
 
 class App extends Component {
   componentWillMount() {
     const onResize = () => {
-      const breakpoint = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/"/g, '');
+      const breakpoint = window
+        .getComputedStyle(document.querySelector('body'), ':before')
+        .getPropertyValue('content')
+        .replace(/"/g, '');
       this.props.updateStyleBreakpoint(breakpoint);
     };
 
@@ -24,28 +30,22 @@ class App extends Component {
     onResize();
   }
 
-  componentDidMount() {
-    if ('serviceWorker' in navigator) {
-      runtime.register();
-    }
-  }
-
   render() {
     return (
       <Router>
         <div className="container">
-          <Navigation />
-          <Switch>
-            <Redirect exact from="/" to="/SVC" />
-            <Route exact path="/SVC" component={SVC} />
-            <Route exact path="/SVR" component={SVR} />
-            <Route exact path="/benchmarks" component={Benchmarks} />
-          </Switch>
+          <Navigation replace to="/SVC" />
+          <Routes>
+            <Route exact path="/" element={<Navigate to="/SVC" />} />
+            <Route exact path="/SVC" element={<SVC />} />
+            <Route exact path="/SVR" element={<SVR />} />
+            <Route exact path="/SVC/OneClass" element={<OneClassSVC />} />
+            <Route exact path="/benchmarks" element={<Benchmarks />} />
+          </Routes>
         </div>
       </Router>
     );
   }
 }
-
 
 export default connect(null, { updateStyleBreakpoint })(App);

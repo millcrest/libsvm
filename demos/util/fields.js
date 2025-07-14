@@ -1,11 +1,13 @@
-const omitBy = require('lodash.omitby');
+import { identity, omitBy } from 'lodash-es';
 
 export const KERNEL = {
   id: 'HP_KERNEL',
   name: 'kernel',
   type: 'select',
-  options: omitBy(SVM.KERNEL_TYPES, (val) => val === SVM.KERNEL_TYPES.PRECOMPUTED),
-  initial: SVM.KERNEL_TYPES.RBF
+  options: omitBy(
+    SVM.KERNEL_TYPES,
+    (val) => val === SVM.KERNEL_TYPES.PRECOMPUTED,
+  ),
 };
 
 export const COST = {
@@ -15,10 +17,9 @@ export const COST = {
   min: -3,
   max: 3,
   normalize: pow10,
-  format: Math.log10,
+  format: (num) => num.toExponential(2),
   step: 0.2,
   gridSearch: true,
-  initial: 10
 };
 
 export const GAMMA = {
@@ -28,10 +29,9 @@ export const GAMMA = {
   min: -3,
   max: 3,
   normalize: pow10,
-  format: Math.log10,
+  format: (num) => num.toExponential(2),
   step: 0.2,
   gridSearch: true,
-  initial: 10
 };
 
 export const NU = {
@@ -40,34 +40,31 @@ export const NU = {
   type: 'range',
   min: 0,
   max: 1,
+  format: identity,
   normalize: toNumber,
   step: 0.05,
   gridSearch: true,
-  initial: 0.5
 };
 
 export const EPSILON = {
   id: 'HP_EPSILON',
   name: 'epsilon',
   type: 'range',
-  min: 0.01,
-  max: 0.5,
-  normalize: toNumber,
-  step: 0.02,
+  min: -3,
+  max: 0,
+  format: (num) => num.toExponential(2),
+  normalize: pow10,
+  step: 0.1,
   gridSearch: true,
-  initial: 0.03
 };
 
 export const DEGREE = {
-  HP: 'HP_DEGREE',
+  id: 'HP_DEGREE',
   name: 'degree',
   type: 'number',
-  gridSearch: false
+  normalize: toNumber,
+  gridSearch: false,
 };
-
-export function getFields() {
-  return [KERNEL, COST, GAMMA, NU, EPSILON, DEGREE];
-}
 
 export function getHyperParameters(type, kernel) {
   const fields = [];
@@ -96,7 +93,11 @@ function pow10(value) {
 }
 
 function isNu(type) {
-  return type === SVM.SVM_TYPES.NU_SVC || type === SVM.SVM_TYPES.NU_SVR || type === SVM.SVM_TYPES.ONE_CLASS;
+  return (
+    type === SVM.SVM_TYPES.NU_SVC ||
+    type === SVM.SVM_TYPES.NU_SVR ||
+    type === SVM.SVM_TYPES.ONE_CLASS
+  );
 }
 
 function isCost(type) {
@@ -104,7 +105,11 @@ function isCost(type) {
 }
 
 function hasGamma(kernel) {
-  return kernel === SVM.KERNEL_TYPES.RBF || kernel === SVM.KERNEL_TYPES.SIGMOID || kernel === SVM.KERNEL_TYPES.POLYNOMIAL;
+  return (
+    kernel === SVM.KERNEL_TYPES.RBF ||
+    kernel === SVM.KERNEL_TYPES.SIGMOID ||
+    kernel === SVM.KERNEL_TYPES.POLYNOMIAL
+  );
 }
 
 // function isClassification(type) {

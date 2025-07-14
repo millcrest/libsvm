@@ -1,15 +1,14 @@
-'use strict';
+import Kernel from 'ml-kernel';
+import range from 'lodash.range';
+import data from 'ml-dataset-iris';
+import { loadSVM } from '../wasm.js';
 
-const Kernel = require('ml-kernel');
-const range = require('lodash.range');
-
-const SVM = require('../asm');
+const SVM = await loadSVM();
 
 const gamma = 0.2;
 const cost = 1;
 
-function exec(SVM, precomputed) {
-  const data = require('ml-dataset-iris');
+async function exec(precomputed) {
   var trainData;
 
   const features = data.getNumbers();
@@ -33,11 +32,11 @@ function exec(SVM, precomputed) {
     cost: cost,
     kernel: precomputed ? SVM.KERNEL_TYPES.PRECOMPUTED : SVM.KERNEL_TYPES.RBF,
     gamma,
-    probabilityEstimates: true
+    probabilityEstimates: true,
   });
   svm.train(trainData, labels);
   var pred = svm.predictProbability(trainData);
   console.log(JSON.stringify(pred, null, 2));
 }
 
-exec(SVM, true);
+await exec(true);
