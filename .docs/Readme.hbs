@@ -19,17 +19,6 @@ Resources about libsvm:
 npm install libsvm-js
 ```
 
-## Load
-The main entry point loads the WebAssembly build and is asynchronous.
-```js
-import { loadSVM } from 'libsvm-js';
-const SVM = await loadSVM();
-const svm = new SVM();
-```
-
-## Load in a web browser
-The npm package contains a bundle for the browser that works with AMD and browser globals. They are located in the `dist/browser` directory of the package. You can load them into your web page with a `script` tag. For the web assembly module, make sure that the libsvm.wasm file is served from the same relative path as the js file.
-
 ## Basic usage
 This example illustrates how to use the library to train and use an SVM classifier.
 ```js
