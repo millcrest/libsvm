@@ -7,7 +7,6 @@
   "files": [
     "src",
     "build",
-    "dist",
     "wasm.js",
     "LICENSE"
   ],
