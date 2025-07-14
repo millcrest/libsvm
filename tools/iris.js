@@ -9,6 +9,6 @@ dataset.forEach((d) => {
 });
 const str = dataset.map((d) => d.join(' ')).join('\n');
 fs.writeFileSync(
-  path.resolve(import.meta.dirname, '../benchmark/data.txt'),
+  path.resolve(import.meta.dirname, '../benchmark/iris/data.txt'),
   str,
 );
