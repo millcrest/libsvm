@@ -4,3 +4,4 @@ build
 demo-dist
 benchmark/**/bin
 svm.o
+examples/bodyfat.model
