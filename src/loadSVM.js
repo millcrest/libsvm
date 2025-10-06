@@ -310,7 +310,7 @@ export default function loadSVM(libsvm) {
      * @return {SVM} - SVM instance that contains the model.
      */
     static load(serializedModel) {
-      const svm = new SVM();
+      const svm = new SVM({});
       svm.model = deserialize_model(serializedModel);
       svm._deserialized = true;
       return svm;
@@ -338,11 +338,12 @@ export default function loadSVM(libsvm) {
   /**
    * SVM kernel types
    * @memberof SVM
-   * @type {{LINEAR: string, POLYNOMIAL: string, RBF: string, SIGMOID: string}}
+   * @type {{LINEAR: string, POLYNOMIAL: string, RBF: string, SIGMOID: string, PRECOMPUTED:string}}
    * @property LINEAR - Linear kernel
    * @property POLYNOMIAL - Polynomial kernel
    * @property RBF - Radial basis function (gaussian) kernel
    * @property SIGMOID - Sigmoid kernel
+   * @property PRECOMPUTED - Precomputed
    */
   SVM.KERNEL_TYPES = {
     LINEAR: '0',
