@@ -16,13 +16,13 @@ Resources about libsvm:
 # Usage
 ## Install
 ```bash
-npm install libsvm-js
+npm install @millcrest/libsvm-js
 ```
 
 ## Basic usage
 This example illustrates how to use the library to train and use an SVM classifier.
 ```js
-import { loadSVM } from 'libsvm-js';
+import { loadSVM } from '@millcrest/libsvm-js';
 
 const SVM = await loadSVM();
 const svm = new SVM({
